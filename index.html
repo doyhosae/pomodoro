@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Sortable.js 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Pomodoro Timer</h1>
+        <p style="color: #A9A9A9;">타이머 25분 / 휴식 5분 / 셋트 4회</p>
+        <div id="timer">
+            <span id="minutes">25</span>:<span id="seconds">00</span>
+        </div>
+        <button id="start-button">Start</button>
+        <button id="reset-button">Reset</button>
+        <div id="task-list">
+            <h2>Tasks</h2>
+            <ul id="tasks">
+                <!-- Task items will be added here -->
+            </ul>
+            <input type="text" id="task-input" placeholder="Add a new task">
+            <button id="add-task-button">Add Task</button>
+        </div>
+    </div>
+    <div class="sound">
+        <audio id="work-sound" src="sounds/work-sound.mp3" preload="auto"></audio>
+        <audio id="break-sound" src="sounds/break-sound.mp3" preload="auto"></audio>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
