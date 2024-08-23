@@ -2,6 +2,12 @@
 const workDuration = 25 * 60; // 25분을 초로 변환
 const breakDuration = 5 * 60; // 5분을 초로 변환
 const cycles = 4; // 4회 반복
+
+// 테스트용
+// const workDuration = 25; // 25분을 초로 변환
+// const breakDuration = 5; // 5분을 초로 변환
+// const cycles = 4; // 4회 반복
+
 let currentCycle = 0; // 현재 몇 번째 사이클인지 저장
 
 let isWorkPhase = true; // 작업 단계인지 휴식 단계인지
@@ -26,8 +32,10 @@ const breakSound = document.getElementById('break-sound');
 startButton.addEventListener('click', () => {
     if (isPaused) {
         startTimer();
+        resetButton.style.display = 'inline-block'; // Reset 버튼 보이기
     } else {
         pauseTimer();
+        resetButton.style.display = 'none'; // Reset 버튼 숨기기
     }
     isPaused = !isPaused;
     startButton.textContent = isPaused ? 'Start' : 'Pause';
@@ -41,7 +49,7 @@ resetButton.addEventListener('click', () => {
     }
 });
 
-// 작업 추가
+// 작업 추가 버튼 클릭 시 addTask 함수 실행
 addTaskButton.addEventListener('click', addTask);
 
 function startTimer() {
@@ -58,6 +66,8 @@ function startTimer() {
                     isWorkPhase = false; // 휴식 단계로 전환
                     timeRemaining = breakDuration;
                     breakSound.play(); // 휴식 사운드 재생
+                    document.querySelector('.container').classList.add('break-time'); // 컨테이너 배경색 변경
+                    document.body.classList.add('break-time-body'); // body 배경색 변경
                     startTimer();
                 } else {
                     alert("포모도로 세션이 완료되었습니다!");
@@ -67,6 +77,8 @@ function startTimer() {
                 isWorkPhase = true; // 작업 단계로 전환
                 timeRemaining = workDuration;
                 workSound.play(); // 작업 사운드 재생
+                document.querySelector('.container').classList.remove('break-time'); // 컨테이너 배경색 복원
+                document.body.classList.remove('break-time-body'); // body 배경색 복원
                 startTimer();
             }
         }
@@ -93,19 +105,27 @@ function resetTimer() {
     startButton.textContent = 'Start';
     timeRemaining = workDuration;
     updateDisplay(timeRemaining);
+    document.querySelector('.container').classList.remove('break-time'); // 컨테이너 배경색 복원
+    document.body.classList.remove('break-time-body'); // body 배경색 복원
 }
 
 function addTask() {
-    const taskText = taskInput.value.trim();
+    const taskText = taskInput.value.trim(); // 공백 제거
     if (taskText !== "") {
         const li = document.createElement('li');
         li.textContent = taskText;
+
+        // 추가된 작업 항목에 삭제 버튼 추가
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.addEventListener('click', () => li.remove());
+
         li.appendChild(deleteButton);
         tasksList.appendChild(li);
+
+        // 입력 필드를 초기화하고 포커스를 유지
         taskInput.value = '';
+        taskInput.focus();
     }
 }
 

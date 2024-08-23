@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +7,27 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Sortable.js 추가 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <!-- Font Awesome 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Pomodoro Timer</h1>
+        <h2>포모도로 타이머🍅</h2>
         <p style="color: #A9A9A9;">타이머 25분 / 휴식 5분 / 셋트 4회</p>
         <div id="timer">
             <span id="minutes">25</span>:<span id="seconds">00</span>
         </div>
-        <button id="start-button">Start</button>
-        <button id="reset-button">Reset</button>
+        <div class="btn-group">
+            <button id="start-button" class="main-button">Start</button>
+            <button id="reset-button" class="sub-button" style="display: none;">Reset</button>
+        </div>
+        <hr>
+        <h2>지금 할 일</h2>
         <div id="task-list">
-            <h2>Tasks</h2>
             <ul id="tasks">
                 <!-- Task items will be added here -->
             </ul>
-            <input type="text" id="task-input" placeholder="Add a new task">
+            <input type="text" id="task-input" placeholder="작업 추가" autofocus>
             <button id="add-task-button">Add Task</button>
         </div>
     </div>

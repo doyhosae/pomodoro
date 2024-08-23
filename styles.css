@@ -1,12 +1,17 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: rgba(173, 216, 230, 0.5); /* 옅은 파란색 */
+    background-color: rgba(173, 216, 230, 0.5); /* 기본 옅은 파란색 */
     color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    transition: background-color 0.5s ease; /* 배경색 전환 효과 */
+}
+
+.break-time-body {
+    background-color: #ffefd5; /* 옅은 토마토 색상 (PeachPuff 색상) */
 }
 
 .container {
@@ -26,6 +31,22 @@ body {
 button {
     padding: 10px 20px;
     margin: 5px;
+    background-color: transparent;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* 메인 버튼 스타일 */
+.main-button {
+    padding: 10px 20px;
+    margin: 5px;
     border: none;
     background-color: #007BFF;
     color: white;
@@ -33,12 +54,14 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.main-button:hover {
     background-color: #0056b3;
 }
 
 #task-list {
     margin-top: 20px;
+    display: flex; /* Flexbox를 사용하여 입력 필드와 버튼을 나란히 배치 */
+    align-items: center; /* 입력 필드와 버튼의 높이를 동일하게 맞춤 */
 }
 
 #task-input {
