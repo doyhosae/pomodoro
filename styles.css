@@ -33,7 +33,7 @@ button {
     margin: 5px;
     background-color: transparent;
     border: 1px solid #6c757d;
-    color: #6c757d;
+    /* color: #6c757d; */
     border-radius: 5px;
     cursor: pointer;
 }
@@ -60,8 +60,6 @@ button:hover {
 
 #task-list {
     margin-top: 20px;
-    display: flex; /* Flexbox를 사용하여 입력 필드와 버튼을 나란히 배치 */
-    align-items: center; /* 입력 필드와 버튼의 높이를 동일하게 맞춤 */
 }
 
 #task-input {
