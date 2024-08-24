@@ -15,6 +15,7 @@ body {
 }
 
 .container {
+    position: relative;
     text-align: center;
     background-color: #fff;
     padding: 20px;
@@ -125,4 +126,11 @@ li button:hover {
     text-align: center; /* 텍스트를 중앙에 배치 */
     font-size: 16px; /* 텍스트 크기 설정 */
     color: #333; /* 텍스트 색상 설정 */
+}
+
+#question-icon {
+    position: absolute;
+    top: 10px; /* 위쪽에서 10px 떨어진 위치에 배치 */
+    right: 10px; /* 오른쪽에서 10px 떨어진 위치에 배치 */
+    cursor: pointer; /* 마우스 오버 시 커서 변경 */
 }
