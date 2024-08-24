@@ -20,6 +20,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 336px;
 }
 
 #timer {
@@ -28,23 +29,8 @@ body {
     margin: 20px 0;
 }
 
+
 button {
-    padding: 10px 20px;
-    margin: 5px;
-    background-color: transparent;
-    border: 1px solid #6c757d;
-    /* color: #6c757d; */
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #6c757d;
-    color: white;
-}
-
-/* 메인 버튼 스타일 */
-.main-button {
     padding: 10px 20px;
     margin: 5px;
     border: none;
@@ -52,21 +38,57 @@ button:hover {
     color: white;
     border-radius: 5px;
     cursor: pointer;
+    height: 40px;
 }
 
-.main-button:hover {
+button:hover {
     background-color: #0056b3;
 }
 
-#task-list {
-    margin-top: 20px;
+/* 서브 버튼 스타일 */
+.sub-button {
+    background-color: transparent;
+    border: 1px solid #6c757d; 
+    color: #6c757d;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sub-button:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+#task-action {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #task-input {
+    width: 80%;
+    height: 40px; 
     padding: 10px;
-    width: 200px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* 패딩과 보더를 너비에 포함 */
+}
+
+#add-task-button {
+    width: 40px;
+    height: 40px;
+    background-color: #6c757d;
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center; /* 텍스트 수평 중앙 정렬 */
+    align-items: center; /* 텍스트 수직 중앙 정렬 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    box-sizing: border-box;
 }
 
 ul {
@@ -96,4 +118,11 @@ li button:hover {
 .sortable-ghost {
     opacity: 0.4;
     background-color: #cceeff;
+}
+
+#footer-text {
+    margin-top: 20px; /* container와의 간격 설정 */
+    text-align: center; /* 텍스트를 중앙에 배치 */
+    font-size: 16px; /* 텍스트 크기 설정 */
+    color: #333; /* 텍스트 색상 설정 */
 }

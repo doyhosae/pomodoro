@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer</title>
+    <title>뽀모도로 타이머 - 웹용</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Sortable.js 추가 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
@@ -21,29 +21,39 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <h2>포모도로 타이머🍅</h2>
-        <p style="color: #A9A9A9;">타이머 25분 / 휴식 5분 / 셋트 4회</p>
-        <div id="timer">
-            <span id="minutes">25</span>:<span id="seconds">00</span>
+    <div class="container-wrapper">
+        <div class="container">
+            <h2>뽀모도로 타이머🍅</h2>
+            <p style="color: #A9A9A9;">타이머 25분 / 휴식 5분 / 셋트 4회</p>
+            <div id="timer">
+                <span id="minutes">25</span>:<span id="seconds">00</span>
+            </div>
+            <div class="btn-group">
+                <button id="start-button" style="width:312px;">Start</button>
+                <button id="reset-button" class="sub-button" style="display: none;">Reset</button>
+            </div>
+            <hr>
+            <h2>지금 할 일</h2>
+            <div>
+                <div class="task-action">
+                    <input type="text" id="task-input" placeholder="작업 추가" autofocus>
+                    <button id="add-task-button" class="sub-button"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="task-list">
+                    <ul id="tasks">
+                        <!-- Task items will be added here -->
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="btn-group">
-            <button id="start-button" class="main-button">Start</button>
-            <button id="reset-button" class="sub-button" style="display: none;">Reset</button>
-        </div>
-        <hr>
-        <h2>지금 할 일</h2>
-        <div id="task-list">
-            <ul id="tasks">
-                <!-- Task items will be added here -->
-            </ul>
-            <input type="text" id="task-input" placeholder="작업 추가" autofocus>
-            <button id="add-task-button">Add Task</button>
+        <div id="footer-text">
+            <a href="https://ko.wikipedia.org/wiki/%ED%8F%AC%EB%AA%A8%EB%8F%84%EB%A1%9C_%EA%B8%B0%EB%B2%95" target="_blank">뽀모도로 타이머란?</a>
         </div>
     </div>
     <div class="sound">
         <audio id="work-sound" src="sounds/work-sound.mp3" preload="auto"></audio>
         <audio id="break-sound" src="sounds/break-sound.mp3" preload="auto"></audio>
+        <audio id="celebration-sound" src="sounds/celebration-sound.mp3" preload="auto"></audio>
     </div>
     <script src="script.js"></script>
 </body>

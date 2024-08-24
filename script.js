@@ -4,9 +4,9 @@ const breakDuration = 5 * 60; // 5분을 초로 변환
 const cycles = 4; // 4회 반복
 
 // 테스트용
-// const workDuration = 25; // 25분을 초로 변환
-// const breakDuration = 5; // 5분을 초로 변환
-// const cycles = 4; // 4회 반복
+// const workDuration = 1; // 25분을 초로 변환
+// const breakDuration = 1; // 5분을 초로 변환
+// const cycles = 2; // 4회 반복
 
 let currentCycle = 0; // 현재 몇 번째 사이클인지 저장
 
@@ -27,15 +27,21 @@ const tasksList = document.getElementById('tasks');
 // 오디오 요소 참조
 const workSound = document.getElementById('work-sound');
 const breakSound = document.getElementById('break-sound');
+const celebrationSound = document.getElementById('celebration-sound');
 
 // 타이머 시작 및 일시정지
 startButton.addEventListener('click', () => {
     if (isPaused) {
         startTimer();
         resetButton.style.display = 'inline-block'; // Reset 버튼 보이기
+        startButton.style.width = '149px'; // Start 버튼의 너비를 100%로 설정
+        resetButton.style.width = '149px'; // Start 버튼의 너비를 100%로 설정
+
+        // 작업 사운드 재생
+        const workSoundInstance = new Audio(workSound.src);
+        workSoundInstance.play();
     } else {
         pauseTimer();
-        resetButton.style.display = 'none'; // Reset 버튼 숨기기
     }
     isPaused = !isPaused;
     startButton.textContent = isPaused ? 'Start' : 'Pause';
@@ -43,7 +49,7 @@ startButton.addEventListener('click', () => {
 
 // 타이머 리셋
 resetButton.addEventListener('click', () => {
-    const userConfirmed = confirm("타이머를 리셋하시겠습니까? 리셋하면 진행 중인 타이머가 초기화됩니다.");
+    const userConfirmed = confirm("타이머를 리셋하시겠습니까?\n리셋 시, 현재 타이머가 초기화됩니다.");
     if (userConfirmed) {
         resetTimer();
     }
@@ -65,18 +71,33 @@ function startTimer() {
                 if (currentCycle < cycles) {
                     isWorkPhase = false; // 휴식 단계로 전환
                     timeRemaining = breakDuration;
-                    breakSound.play(); // 휴식 사운드 재생
+                    
+                    // 휴식 사운드 재생
+                    const breakSoundInstance = new Audio(breakSound.src);
+                    breakSoundInstance.play();
+                    
                     document.querySelector('.container').classList.add('break-time'); // 컨테이너 배경색 변경
                     document.body.classList.add('break-time-body'); // body 배경색 변경
                     startTimer();
                 } else {
-                    alert("포모도로 세션이 완료되었습니다!");
-                    resetTimer();
+                    // 완료 사운드 재생
+                    const celebrationSoundInstance = new Audio(celebrationSound.src);
+                    celebrationSoundInstance.play();
+
+                    // alert가 사운드를 방해하지 않도록 일정 시간 뒤에 실행되도록 설정
+                    setTimeout(() => {
+                        alert("포모도로 세션이 완료되었습니다!");
+                        resetTimer();
+                    }, 100); // 100ms(0.1초) 뒤에 alert가 실행되도록 함
                 }
             } else {
                 isWorkPhase = true; // 작업 단계로 전환
                 timeRemaining = workDuration;
-                workSound.play(); // 작업 사운드 재생
+                
+                // 작업 사운드 재생
+                const workSoundInstance = new Audio(workSound.src);
+                workSoundInstance.play();
+                
                 document.querySelector('.container').classList.remove('break-time'); // 컨테이너 배경색 복원
                 document.body.classList.remove('break-time-body'); // body 배경색 복원
                 startTimer();
@@ -107,6 +128,8 @@ function resetTimer() {
     updateDisplay(timeRemaining);
     document.querySelector('.container').classList.remove('break-time'); // 컨테이너 배경색 복원
     document.body.classList.remove('break-time-body'); // body 배경색 복원
+    resetButton.style.display = 'none'; // Reset 버튼 숨기기
+    startButton.style.width = '312px'; // Start 버튼의 너비를 100%로 설정
 }
 
 function addTask() {
@@ -117,7 +140,8 @@ function addTask() {
 
         // 추가된 작업 항목에 삭제 버튼 추가
         const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
+        // deleteButton.textContent = 'Delete';
+        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>'; // Font Awesome 휴지통 아이콘 추가
         deleteButton.addEventListener('click', () => li.remove());
 
         li.appendChild(deleteButton);
