@@ -1,120 +1,102 @@
-// 포모도로 설정 변수
-const workDuration = 25 * 60; // 25분을 초로 변환
-const breakDuration = 5 * 60; // 5분을 초로 변환
-const cycles = 4; // 4회 반복
+// 상수 정의
+const WORK_DURATION = 25 * 60;
+const BREAK_DURATION = 5 * 60;
+const CYCLES = 4;
 
-// 테스트용
-// const workDuration = 1; // 25분을 초로 변환
-// const breakDuration = 1; // 5분을 초로 변환
-// const cycles = 2; // 4회 반복
-
-let currentCycle = 0; // 현재 몇 번째 사이클인지 저장
-
-let isWorkPhase = true; // 작업 단계인지 휴식 단계인지
+// 상태 변수
+let currentCycle = 0;
+let isWorkPhase = true;
 let timer;
-let timeRemaining = workDuration; // 남은 시간을 저장할 변수
-let isPaused = true; // 타이머가 일시정지 상태인지 추적
+let timeRemaining = WORK_DURATION;
 
-// HTML 요소 참조
-const startButton = document.getElementById('start-button');
-const resetButton = document.getElementById('reset-button');
-const minutesDisplay = document.getElementById('minutes');
-const secondsDisplay = document.getElementById('seconds');
-const taskInput = document.getElementById('task-input');
-const addTaskButton = document.getElementById('add-task-button');
-const tasksList = document.getElementById('tasks');
+// DOM 요소
+const elements = {
+    startButton: document.getElementById('start-button'),
+    pauseButton: document.getElementById('pause-button'),
+    resetButton: document.getElementById('reset-button'),
+    minutesDisplay: document.getElementById('minutes'),
+    secondsDisplay: document.getElementById('seconds'),
+    taskInput: document.getElementById('task-input'),
+    addTaskButton: document.getElementById('add-task-button'),
+    tasksList: document.getElementById('tasks'),
+    container: document.querySelector('.container')
+};
 
-// 오디오 요소 참조
-const workSound = document.getElementById('work-sound');
-const breakSound = document.getElementById('break-sound');
-const celebrationSound = document.getElementById('celebration-sound');
+// 오디오 요소
+const sounds = {
+    work: document.getElementById('work-sound'),
+    break: document.getElementById('break-sound'),
+    celebration: document.getElementById('celebration-sound')
+};
 
-// 타이머 시작 및 일시정지
-startButton.addEventListener('click', () => {
-    if (isPaused) {
-        startTimer();
-        resetButton.style.display = 'inline-block'; // Reset 버튼 보이기
-        startButton.style.width = '49%';
-        resetButton.style.width = '49%';
-
-        // 작업 사운드 재생
-        const workSoundInstance = new Audio(workSound.src);
-        workSoundInstance.play();
-    } else {
-        pauseTimer();
+// 이벤트 리스너 설정
+elements.startButton.addEventListener('click', handleStart);
+elements.pauseButton.addEventListener('click', handlePause);
+elements.resetButton.addEventListener('click', handleReset);
+elements.addTaskButton.addEventListener('click', addTask);
+elements.taskInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        addTask();
     }
-    isPaused = !isPaused;
-    startButton.textContent = isPaused ? 'Start' : 'Pause';
 });
 
-// 타이머 리셋
-resetButton.addEventListener('click', () => {
-    const userConfirmed = confirm("타이머를 리셋하시겠습니까?\n리셋 시, 현재 타이머가 초기화됩니다.");
-    if (userConfirmed) {
+function handleStart() {
+    if (!timer) {
+        startTimer();
+        updateButtonVisibility(false, true, true);
+    }
+}
+
+function handlePause() {
+    if (timer) {
+        pauseTimer();
+        elements.pauseButton.textContent = '재시작';
+        elements.pauseButton.style.backgroundColor = '#ffcd6c';
+        elements.pauseButton.style.color = '#000';
+    } else {
+        startTimer();
+        elements.pauseButton.textContent = '일시정지';
+        elements.pauseButton.style.backgroundColor = ''; // 원래 색상으로 복원
+        elements.pauseButton.style.color = '';
+    }
+}
+
+function handleReset() {
+    if (confirm("타이머를 리셋하시겠습니까?\n리셋 시, 현재 타이머가 초기화됩니다.")) {
         resetTimer();
     }
-});
+}
 
-// 작업 추가 버튼 클릭 시 addTask 함수 실행
-addTaskButton.addEventListener('click', addTask);
+function toggleBreakTimeBody(isBreakTime) {
+    if (isBreakTime) {
+        document.body.classList.add('break-time-body');
+    } else {
+        document.body.classList.remove('break-time-body');
+    }
+}
 
 function startTimer() {
-    timer = setInterval(() => {
-        timeRemaining--;
-        updateDisplay(timeRemaining);
-
-        if (timeRemaining <= 0) {
-            clearInterval(timer);
-
-            if (isWorkPhase) {
-                currentCycle++;
-                if (currentCycle < cycles) {
-                    isWorkPhase = false; // 휴식 단계로 전환
-                    timeRemaining = breakDuration;
-                    
-                    // 휴식 사운드 재생
-                    const breakSoundInstance = new Audio(breakSound.src);
-                    breakSoundInstance.play();
-                    
-                    document.querySelector('.container').classList.add('break-time'); // 컨테이너 배경색 변경
-                    document.body.classList.add('break-time-body'); // body 배경색 변경
-                    startTimer();
-                } else {
-                    // 완료 사운드 재생
-                    const celebrationSoundInstance = new Audio(celebrationSound.src);
-                    celebrationSoundInstance.play();
-
-                    // alert가 사운드를 방해하지 않도록 일정 시간 뒤에 실행되도록 설정
-                    setTimeout(() => {
-                        alert("포모도로 세션이 완료되었습니다!");
-                        resetTimer();
-                    }, 100); // 100ms(0.1초) 뒤에 alert가 실행되도록 함
-                }
-            } else {
-                isWorkPhase = true; // 작업 단계로 전환
-                timeRemaining = workDuration;
-                
-                // 작업 사운드 재생
-                const workSoundInstance = new Audio(workSound.src);
-                workSoundInstance.play();
-                
-                document.querySelector('.container').classList.remove('break-time'); // 컨테이너 배경색 복원
-                document.body.classList.remove('break-time-body'); // body 배경색 복원
-                startTimer();
+    if (!timer) {
+        timer = setInterval(() => {
+            timeRemaining--;
+            updateDisplay();
+            if (timeRemaining <= 0) {
+                clearInterval(timer);
+                timer = null;
+                handlePhaseChange();
             }
-        }
-    }, 1000);
+        }, 1000);
+        playSound(sounds.work);
+    }
+    toggleBreakTimeBody(false);
 }
 
 function pauseTimer() {
-    clearInterval(timer);
-}
-
-function updateDisplay(timeRemaining) {
-    const minutes = Math.floor(timeRemaining / 60);
-    const seconds = timeRemaining % 60;
-    minutesDisplay.textContent = minutes < 10 ? '0' + minutes : minutes;
-    secondsDisplay.textContent = seconds < 10 ? '0' + seconds : seconds;
+    if (timer) {
+        clearInterval(timer);
+        timer = null;
+        toggleBreakTimeBody(true);
+    }
 }
 
 function resetTimer() {
@@ -122,42 +104,105 @@ function resetTimer() {
     timer = null;
     currentCycle = 0;
     isWorkPhase = true;
-    isPaused = true;
-    startButton.textContent = 'Start';
-    timeRemaining = workDuration;
-    updateDisplay(timeRemaining);
-    document.querySelector('.container').classList.remove('break-time'); // 컨테이너 배경색 복원
-    document.body.classList.remove('break-time-body'); // body 배경색 복원
-    resetButton.style.display = 'none'; // Reset 버튼 숨기기
-    startButton.style.width = '100%'; // Start 버튼의 너비를 100%로 설정
+    timeRemaining = WORK_DURATION;
+    updateDisplay();
+    resetUIState();
 }
 
-function addTask() {
-    const taskText = taskInput.value.trim(); // 공백 제거
-    if (taskText !== "") {
-        const li = document.createElement('li');
-        li.textContent = taskText;
+function updateDisplay() {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    elements.minutesDisplay.textContent = padZero(minutes);
+    elements.secondsDisplay.textContent = padZero(seconds);
+}
 
-        // 추가된 작업 항목에 삭제 버튼 추가
-        const deleteButton = document.createElement('button');
-        // deleteButton.textContent = 'Delete';
-        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>'; // Font Awesome 휴지통 아이콘 추가
-        deleteButton.addEventListener('click', () => li.remove());
+function padZero(num) {
+    return num < 10 ? '0' + num : num;
+}
 
-        li.appendChild(deleteButton);
-        tasksList.appendChild(li);
-
-        // 입력 필드를 초기화하고 포커스를 유지
-        taskInput.value = '';
-        taskInput.focus();
+function handlePhaseChange() {
+    if (isWorkPhase) {
+        currentCycle++;
+        if (currentCycle < CYCLES) {
+            switchToBreak();
+        } else {
+            completePomodoro();
+        }
+    } else {
+        switchToWork();
     }
 }
 
-// 초기 화면 설정
-updateDisplay(timeRemaining);
+function switchToBreak() {
+    isWorkPhase = false;
+    timeRemaining = BREAK_DURATION;
+    elements.container.classList.add('break-time');
+    toggleBreakTimeBody(true);
+    startTimer();
+}
 
-// Sortable.js를 사용하여 Tasks 리스트의 드래그 앤 드롭 기능 활성화
-new Sortable(tasksList, {
-    animation: 150, // 드래그 시 애니메이션 효과 시간 (밀리초)
-    ghostClass: 'sortable-ghost', // 드래그 중인 아이템에 적용될 클래스
+function switchToWork() {
+    isWorkPhase = true;
+    timeRemaining = WORK_DURATION;
+    elements.container.classList.remove('break-time');
+    toggleBreakTimeBody(false);
+    startTimer();
+}
+
+function completePomodoro() {
+    playSound(sounds.celebration);
+    setTimeout(() => {
+        alert("포모도로 세션이 완료되었습니다!");
+        resetTimer();
+    }, 100);
+}
+
+function playSound(sound) {
+    const soundInstance = new Audio(sound.src);
+    soundInstance.play();
+}
+
+function addTask() {
+    const taskText = elements.taskInput.value.trim();
+    if (taskText !== "") {
+        const li = createTaskElement(taskText);
+        elements.tasksList.appendChild(li);
+        elements.taskInput.value = '';
+        elements.taskInput.focus();
+    }
+}
+
+function createTaskElement(taskText) {
+    const li = document.createElement('li');
+    li.textContent = taskText;
+    li.className = 'task-item'; // ID 대신 클래스 사용
+    const deleteButton = createDeleteButton(() => li.remove());
+    li.appendChild(deleteButton);
+    return li;
+}
+
+function createDeleteButton(onClickHandler) {
+    const deleteButton = document.createElement('button');
+    deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+    deleteButton.addEventListener('click', onClickHandler);
+    return deleteButton;
+}
+
+function resetUIState() {
+    elements.container.classList.remove('break-time');
+    toggleBreakTimeBody(false);
+    updateButtonVisibility(true, false, false);
+}
+
+function updateButtonVisibility(start, pause, reset) {
+    elements.startButton.style.display = start ? 'inline-block' : 'none';
+    elements.pauseButton.style.display = pause ? 'inline-block' : 'none';
+    elements.resetButton.style.display = reset ? 'inline-block' : 'none';
+}
+
+updateDisplay();
+
+new Sortable(elements.tasksList, {
+    animation: 150,
+    ghostClass: 'sortable-ghost',
 });
