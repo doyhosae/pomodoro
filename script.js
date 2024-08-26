@@ -34,8 +34,8 @@ startButton.addEventListener('click', () => {
     if (isPaused) {
         startTimer();
         resetButton.style.display = 'inline-block'; // Reset 버튼 보이기
-        startButton.style.width = '149px'; // Start 버튼의 너비를 100%로 설정
-        resetButton.style.width = '149px'; // Start 버튼의 너비를 100%로 설정
+        startButton.style.width = '49%';
+        resetButton.style.width = '49%';
 
         // 작업 사운드 재생
         const workSoundInstance = new Audio(workSound.src);
@@ -129,7 +129,7 @@ function resetTimer() {
     document.querySelector('.container').classList.remove('break-time'); // 컨테이너 배경색 복원
     document.body.classList.remove('break-time-body'); // body 배경색 복원
     resetButton.style.display = 'none'; // Reset 버튼 숨기기
-    startButton.style.width = '312px'; // Start 버튼의 너비를 100%로 설정
+    startButton.style.width = '100%'; // Start 버튼의 너비를 100%로 설정
 }
 
 function addTask() {
